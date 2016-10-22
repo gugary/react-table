@@ -61,19 +61,26 @@ var tbody = mkComp({
         }));
     }
 });
+var nyse_holidays=["2016/11/24","2016/12/26","2017/01/02","2017/01/16","2017/02/20","2017/04/14","2017/05/29","2017/07/04","2017/09/04","2017/11/23","2017/12/25"];
+var holidays = nyse_holidays.map(function(d){
+    var p=d.split('/');
+    var d=new Date(p[0],p[1]-1,p[2]);
+    return d.toDateString();
+});
+function isWeekend(d){
+    var name = d.substr(0,3);
+    return name==='Sat' || name==='Sun';
+}
+function isTradingDay(d){
+    return !isWeekend(d) && !isHoliday(d);
+}
+function isHoliday(d){
+    return holidays.indexOf(d)>=0;
+}
 function isTradingHour(){
-    var d=new Date();
-    var h=d.getUTCHours();
-    if(h<=20){
-        if(h>13){
-            return true;
-        }else if(h==13){
-            return (d.getMinutes()>=30)?true:false;
-        }else{
-            return false;
-        }
-    }
-    return false;
+    var d=new Date(),h=d.getUTCHours();
+	var open=isTradingDay(d.toDateString());
+    return open && h<=20 && (h>13 || (h==13 && 30<=d.getMinutes()));
 }
 var table = mkComp({
     getInitialState: function(){
@@ -84,7 +91,7 @@ var table = mkComp({
             this.googleApi();
         }
     },
-    googleApi: function(b){
+    googleApi: function(){
         $.ajax({
             url: this.props.url,
             dataType: 'json',

@@ -80,7 +80,7 @@ function isHoliday(d){
 function isTradingHour(){
     var d=new Date(),h=d.getUTCHours();
 	var open=isTradingDay(d.toDateString());
-    return open && h<=20 && (h>13 || (h==13 && 30<=d.getMinutes()));
+    return open && h<20 && (h>13 || (h==13 && 30<=d.getMinutes()));
 }
 var table = mkComp({
     getInitialState: function(){

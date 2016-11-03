@@ -32,8 +32,8 @@ var th = mkComp({
 });
 var thead = mkComp({
     render: function(){
-        return mkElem('thead', {className:"gthead"},
-            mkElem("tr", {className:"gtr"}, this.props.cols.map(function(c,j){
+        return mkElem('thead', {},
+            mkElem("tr", {}, this.props.cols.map(function(c,j){
                 return mkElem(th, {key:j, val:c.disp})
             }))
         )
@@ -47,17 +47,17 @@ var td = mkComp({
 });
 var tr = mkComp({
     render: function(){
-        var row=this.props.row;
-        return mkElem("tr", {className:"gtr", }, this.props.cols.map(function(c,j){
-            return mkElem(td, {key:j, val:row[c.name], col:c, row:row});
+        var myrow=this.props.row;
+        return mkElem("tr", {}, this.props.cols.map(function(c,j){
+            return mkElem(td, {key:j, val:myrow[c.name], col:c, row:myrow});
         }));
     }
 });
 var tbody = mkComp({
     render: function(){
-        var data=this.props.data;
-        return mkElem('tbody', {className:"gtbody"}, this.props.data.rows.map(function(r,j){
-            return mkElem(tr, {key:j, row:r, cols:data.cols});
+        var mycols=this.props.cols;
+        return mkElem('tbody', {}, this.props.rows.map(function(r,j){
+            return mkElem(tr, {key:j, row:r, cols:mycols});
         }));
     }
 });
@@ -84,7 +84,7 @@ function isTradingHour(){
 }
 var table = mkComp({
     getInitialState: function(){
-        return {data: {rows:[], cols:this.props.cols}};
+        return {rows:[]}
     },
     onTimer: function(){
         if(isTradingHour()){
@@ -97,11 +97,11 @@ var table = mkComp({
             dataType: 'json',
             cache: false,
             success: function(json){
-                this.setState({data: {rows:json, cols:this.props.cols}})
+                this.setState({rows:json})
             }.bind(this),
             error: function(xhr, status, err){
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
+                console.error(status, err.toString());
+            }
         });
     },
     componentDidMount: function() {
@@ -109,9 +109,10 @@ var table = mkComp({
         setInterval(this.onTimer, 1000);
     },
     render: function(){
-        return mkElem('table', {className:"gtable"},[
-            mkElem(thead, {key:0, cols:this.state.data.cols}),
-            mkElem(tbody, {key:1, data:this.state.data})
+		var mycols=this.props.cols;
+        return mkElem('table', {},[
+            mkElem(thead, {key:0, cols:mycols}),
+            mkElem(tbody, {key:1, cols:mycols, rows:this.state.rows})
         ])
     }
 });

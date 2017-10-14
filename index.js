@@ -19,48 +19,45 @@ function cellByType(type,v,r){
         return v;
     }
 }
-function mkComp(spec){
-    return React.createClass(spec);
-}
 function mkElem(tag,props,children){
     return React.createElement(tag,props,children);
 }
-const th = mkComp({
-    render: function(){
+class Th extends React.Component{
+    render(){
         return mkElem('th', {className:"gth"}, this.props.val);
     }
-});
-const thead = mkComp({
-    render: function(){
+}
+class Thead extends React.Component{
+    render(){
         return mkElem('thead', {},
             mkElem("tr", {}, this.props.cols.map(function(c,j){
-                return mkElem(th, {key:j, val:c.disp})
+                return mkElem(Th, {/*key:j,*/ val:c.disp})
             }))
         )
     }
-});
-const td = mkComp({
-    render: function(){
+}
+class Td extends React.Component{
+    render(){
         const c=this.props.col, v=this.props.val, r=this.props.row;
         return mkElem('td', {className:c.klass}, cellByType(c.type,v,r));
     }
-});
-const tr = mkComp({
-    render: function(){
+}
+class Tr extends React.Component{
+    render(){
         const myrow=this.props.row;
         return mkElem("tr", {}, this.props.cols.map(function(c,j){
-            return mkElem(td, {key:j, val:myrow[c.name], col:c, row:myrow});
+            return mkElem(Td, {/*key:j,*/ val:myrow[c.name], col:c, row:myrow});
         }));
     }
-});
-const tbody = mkComp({
-    render: function(){
+}
+class Tbody extends React.Component{
+    render(){
         const mycols=this.props.cols;
         return mkElem('tbody', {}, this.props.rows.map(function(r,j){
-            return mkElem(tr, {key:j, row:r, cols:mycols});
+            return mkElem(Tr, {/*key:j,*/ row:r, cols:mycols});
         }));
     }
-});
+}
 const nyse_holidays=[
     "2017/11/23",
     "2017/12/25",
@@ -94,16 +91,19 @@ function isTradingHour(){
     const open=isTradingDay(d.toDateString());
     return open && h<20 && (h>13 || (h==13 && 30<=d.getMinutes()));
 }
-const table = mkComp({
-    getInitialState: function(){
-        return {rows:[]}
-    },
-    onTimer: function(){
+class Table extends React.Component{
+    constructor(props, context) {
+	super(props, context);
+	this.state = {
+	    rows: []
+	};
+    }
+    onTimer(){
         if(isTradingHour()){
             this.googleApi();
         }
-    },
-    googleApi: function(){
+    }
+    googleApi(){
         $.ajax({
             url: this.props.url,
             dataType: 'json',
@@ -115,20 +115,20 @@ const table = mkComp({
                 console.error(status, err.toString());
             }
         });
-    },
-    componentDidMount: function() {
+    }
+    componentDidMount() {
         this.googleApi();
         setInterval(this.onTimer, 2000);
-    },
-    render: function(){
+    }
+    render(){
 	const mycols=this.props.cols;
         return mkElem('table', {},[
-            mkElem(thead, {key:0, cols:mycols}),
-            mkElem(tbody, {key:1, cols:mycols, rows:this.state.rows})
+            mkElem(Thead, {/*key:0,*/ cols:mycols}),
+            mkElem(Tbody, {/*key:1,*/ cols:mycols, rows:this.state.rows})
         ])
     }
-});
+}
 ReactDOM.render(
-    mkElem(table, {url:"https://ggu.herokuapp.com/get", cols:mycols}),
+    mkElem(Table, {url:"https://ggu.herokuapp.com/get", cols:mycols}),
     document.getElementById('gug')
 );

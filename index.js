@@ -34,7 +34,7 @@ const thead = mkComp({
     render: function(){
         return mkElem('thead', {},
             mkElem("tr", {}, this.props.cols.map(function(c,j){
-                return mkElem(th, {key:j, val:c.disp})
+                return mkElem(th, {val:c.disp})
             }))
         )
     }
@@ -49,7 +49,7 @@ const tr = mkComp({
     render: function(){
         const myrow=this.props.row;
         return mkElem("tr", {}, this.props.cols.map(function(c,j){
-            return mkElem(td, {key:j, val:myrow[c.name], col:c, row:myrow});
+            return mkElem(td, {val:myrow[c.name], col:c, row:myrow});
         }));
     }
 });
@@ -57,7 +57,7 @@ const tbody = mkComp({
     render: function(){
         const mycols=this.props.cols;
         return mkElem('tbody', {}, this.props.rows.map(function(r,j){
-            return mkElem(tr, {key:j, row:r, cols:mycols});
+            return mkElem(tr, {row:r, cols:mycols});
         }));
     }
 });
@@ -99,9 +99,9 @@ const table = mkComp({
         return {rows:[]}
     },
     onTimer: function(){
-        //if(isTradingHour()){
+        if(isTradingHour()){
             this.googleApi();
-        //}
+        }
     },
     googleApi: function(){
         $.ajax({
@@ -118,13 +118,13 @@ const table = mkComp({
     },
     componentDidMount: function() {
         this.googleApi();
-        setInterval(this.onTimer, 600000);
+        setInterval(this.onTimer, 2000);
     },
     render: function(){
 	const mycols=this.props.cols;
         return mkElem('table', {},[
-            mkElem(thead, {key:0, cols:mycols}),
-            mkElem(tbody, {key:1, cols:mycols, rows:this.state.rows})
+            mkElem(thead, {cols:mycols}),
+            mkElem(tbody, {cols:mycols, rows:this.state.rows})
         ])
     }
 });

@@ -2,7 +2,7 @@ div#gug{
     padding-top: 20px;
     padding-left: 20px;
 }
-.gtable{
+table{
     font-family:arial,sans-serif;
     font-size:13px;
     color:rgb(56,151,178);
@@ -10,13 +10,10 @@ div#gug{
     border-collapse: collapse;
 }
 .gth{
-    border:1px solid black;
-    overflow: hidden;
-    color: while;
     background-color: black;
-    padding: 8px;
+    text-align: center;
 }
-td{
+td, th{
     border:1px solid black;
     overflow: hidden;
     text-align: right;

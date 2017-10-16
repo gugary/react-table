@@ -97,6 +97,8 @@ class Table extends React.Component{
 	this.state = {
 	    rows: []
 	};
+	this.googleApi = this.googleApi.bind(this);
+	this.onTimer = this.onTimer.bind(this);
     }
     onTimer(){
         if(isTradingHour()){

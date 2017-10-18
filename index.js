@@ -123,8 +123,9 @@ class Table extends React.Component{
     }
     componentDidMount() {
         this.googleApi();
+	const timer = this.onTimer;
 	setTimeout(function(){
-	    this.onTimer()
+	    timer();
 	}, 2000);
         // setInterval(this.onTimer, 2000);
     }

@@ -89,7 +89,7 @@ function isHoliday(d){
 function isTradingHour(){
     const d=new Date(),h=d.getUTCHours();
     const open=isTradingDay(d.toDateString());
-    return open && (h<20 || (h==20 && 15<=d.getMinutes())) && (h>13 || (h==13 && 30<=d.getMinutes()));
+    return open && (h<20 || (h==20 && 30<=d.getMinutes())) && (h>13 || (h==13 && 30<=d.getMinutes()));
 }
 class Table extends React.Component{
     constructor(props, context) {
@@ -103,6 +103,9 @@ class Table extends React.Component{
     onTimer(){
         if(isTradingHour()){
             this.googleApi();
+	    setTimeout(function(){
+		this.onTimer()
+	    }, 2000);
         }
     }
     googleApi(){
@@ -120,7 +123,10 @@ class Table extends React.Component{
     }
     componentDidMount() {
         this.googleApi();
-        setInterval(this.onTimer, 2000);
+	setTimeout(function(){
+	    this.onTimer()
+	}, 2000);
+        // setInterval(this.onTimer, 2000);
     }
     render(){
 	const mycols=this.props.cols;

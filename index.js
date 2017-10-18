@@ -31,7 +31,7 @@ class Thead extends React.Component{
     render(){
         return mkElem('thead', {},
             mkElem("tr", {}, this.props.cols.map(function(c,j){
-                return mkElem(Th, {/*key:j,*/ val:c.disp})
+                return mkElem(Th, {val:c.disp})
             }))
         )
     }
@@ -46,7 +46,7 @@ class Tr extends React.Component{
     render(){
         const myrow=this.props.row;
         return mkElem("tr", {}, this.props.cols.map(function(c,j){
-            return mkElem(Td, {/*key:j,*/ val:myrow[c.name], col:c, row:myrow});
+            return mkElem(Td, {val:myrow[c.name], col:c, row:myrow});
         }));
     }
 }
@@ -54,7 +54,7 @@ class Tbody extends React.Component{
     render(){
         const mycols=this.props.cols;
         return mkElem('tbody', {}, this.props.rows.map(function(r,j){
-            return mkElem(Tr, {/*key:j,*/ row:r, cols:mycols});
+            return mkElem(Tr, {row:r, cols:mycols});
         }));
     }
 }
@@ -89,7 +89,7 @@ function isHoliday(d){
 function isTradingHour(){
     const d=new Date(),h=d.getUTCHours();
     const open=isTradingDay(d.toDateString());
-    return open && h<20 && (h>13 || (h==13 && 30<=d.getMinutes()));
+    return open && (h<20 || (h==20 && 15<=d.getMinutes())) && (h>13 || (h==13 && 30<=d.getMinutes()));
 }
 class Table extends React.Component{
     constructor(props, context) {
@@ -125,8 +125,8 @@ class Table extends React.Component{
     render(){
 	const mycols=this.props.cols;
         return mkElem('table', {},[
-            mkElem(Thead, {/*key:0,*/ cols:mycols}),
-            mkElem(Tbody, {/*key:1,*/ cols:mycols, rows:this.state.rows})
+            mkElem(Thead, {cols:mycols}),
+            mkElem(Tbody, {cols:mycols, rows:this.state.rows})
         ])
     }
 }

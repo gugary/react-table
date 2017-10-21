@@ -131,6 +131,7 @@ class Table extends React.Component{
     }
 }
 ReactDOM.render(
-    mkElem(Table, {url:"https://ggu.herokuapp.com/get", cols:mycols}),
+    // mkElem(Table, {url:"https://ggu.herokuapp.com/get", cols:mycols}),
+    mkElem(Table, {url:"http://35.190.182.89/get", cols:mycols}),
     document.getElementById('gug')
 );

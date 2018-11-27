@@ -96,7 +96,9 @@ class Table extends React.Component{
     onTimer(){
         if(isTradingHour()){
             this.googleApi();
-        }
+        }else{
+	    console.log('not trading hour');
+	}
     }
     googleApi(){
         $.ajax({

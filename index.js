@@ -97,7 +97,7 @@ class Table extends React.Component{
         if(isTradingHour()){
             this.googleApi();
         }else{
-	    console.log('not trading hour');
+	    // console.log('not trading hour');
 	}
     }
     googleApi(){

@@ -59,9 +59,11 @@ class Tbody extends React.Component{
     }
 }
 const nyse_holidays=[
-    "2018/09/03",
-    "2018/11/22",
-    "2018/12/25",
+    "2019/01/21",
+    "2019/02/18",
+    "2019/04/19",
+    "2019/05/27",
+    "2019/07/04",
 ];
 const holidays = nyse_holidays.map(function(d){
     const p=d.split('/');
